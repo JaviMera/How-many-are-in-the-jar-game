@@ -2,6 +2,9 @@
 ### Java template
 *.class
 
+# classes folder
+classes/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
