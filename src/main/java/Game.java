@@ -1,12 +1,11 @@
-import java.io.Console;
-
 public class Game {
     public static void main(String[] args) {
 
-        Console console = System.console();
-        String itemType = console.readLine("Enter the type of item: ");
-        int maxItemAmount = Integer.parseInt(console.readLine("Enter max amount of items: "));
+        Prompter prompter = new Prompter();
 
-        console.printf("The maximum amount of %s, is %d", itemType, maxItemAmount);
+        String itemName = prompter.getString("Enter the name of the item(s) in the jar: ");
+        int maxItemAmount = prompter.getInt("Enter max amount of items: ");
+
+        prompter.print("The maximum amount of %s, is %d", new Object[]{itemName, maxItemAmount});
     }
 }
