@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Game {
     public static void main(String[] args) {
 
@@ -6,6 +8,7 @@ public class Game {
         String itemName = prompter.getString("Enter the name of the item(s) in the jar: ");
         int maxItemAmount = prompter.getInt("Enter max amount of items: ");
 
-        prompter.print("The maximum amount of %s, is %d", new Object[]{itemName, maxItemAmount});
+        Jar jar = new Jar(itemName, maxItemAmount);
+        prompter.print("To win, you must guess how many %s are in the jar. Guess between %d and %d.", new Object[]{jar.getItemsName(), 1, jar.getMaxNumberOfItems()});
     }
 }
