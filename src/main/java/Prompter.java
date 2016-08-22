@@ -8,13 +8,11 @@ public class Prompter {
 
     private static final int MIN_ITEMS_NUMBER = 1;
 
-    private NumberGenerator mNumberGenerator;
     private Player mPlayer;
     private Scanner mScanner;
 
     public Prompter()
     {
-        mNumberGenerator = new NumberGenerator();
         mScanner = new Scanner(System.in);
     }
 
@@ -31,9 +29,10 @@ public class Prompter {
 
         showPlayerTitle(jar);
         showObjective(jar);
+        
+        jar.generateItems();
 
-        int numberToGuess = mNumberGenerator.generate(jar.getMaxNumberOfItems());
-        mPlayer = new Player(maxItemAmount, numberToGuess);
+        mPlayer = new Player(jar.getMaxNumberOfItems(), jar.getNumberOfItems());
 
         do
         {

@@ -6,14 +6,19 @@ import java.util.Random;
 public class NumberGenerator {
 
     private Random mRandom;
+    private int mNumber;
 
     public NumberGenerator()
     {
         mRandom  = new Random();
     }
 
-    public int generate(int max)
+    public void generate(int max)
     {
-        return mRandom.nextInt(max) + 1;
+        mNumber = mRandom.nextInt(max) + 1;
+    }
+
+    public int getNumber() {
+        return mNumber;
     }
 }
