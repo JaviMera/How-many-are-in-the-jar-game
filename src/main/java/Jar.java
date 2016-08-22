@@ -1,21 +1,28 @@
+import java.util.Random;
+
 /**
  * Created by Javier on 8/21/2016.
  */
 public class Jar {
 
     private String mItemsName;
+    private static final int mMinNumberOfItems = 1;
     private int mMaxNumberOfItems;
-    private NumberGenerator mNumberGenerator;
+    private int mAmountOfItems;
 
     public Jar(String name, int max)
     {
         mItemsName = name;
         mMaxNumberOfItems = max;
-        mNumberGenerator = new NumberGenerator();
     }
 
     public String getItemsName() {
         return mItemsName;
+    }
+
+    public int getMinNumberOfItems()
+    {
+        return mMinNumberOfItems;
     }
 
     public int getMaxNumberOfItems() {
@@ -24,11 +31,12 @@ public class Jar {
 
     public int getNumberOfItems()
     {
-        return mNumberGenerator.getNumber();
+        return mAmountOfItems;
     }
 
-    public void generateItems()
+    public void fill()
     {
-        mNumberGenerator.generate(getMaxNumberOfItems());
+        Random random = new Random();
+        mAmountOfItems = random.nextInt(mMaxNumberOfItems) + 1;
     }
 }

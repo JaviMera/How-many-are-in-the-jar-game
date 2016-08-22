@@ -1,12 +1,9 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
  * Created by Javier on 8/21/2016.
  */
 public class Prompter {
-
-    private static final int MIN_ITEMS_NUMBER = 1;
 
     private Player mPlayer;
     private Scanner mScanner;
@@ -16,57 +13,65 @@ public class Prompter {
         mScanner = new Scanner(System.in);
     }
 
-    public void play() {
-        showAdminTitle();
-
-        print("Enter the name of the item(s) in the jar: ");
+    public void play()
+    {
+        print("\nADMINISTRATOR SETUP\n" + "*******************\n");
+        print("Enter What type of item: ");
         String itemName = getStringFromInput();
 
-        print("Enter max amount of items: ");
+        print("Enter maximum amount of %s: ", itemName);
         int maxItemAmount = getIntFromInput();
 
         Jar jar = new Jar(itemName, maxItemAmount);
 
-        showPlayerTitle(jar);
+        print("name: ");
+        String name = getStringFromInput();
+        print("\nPlayer: %s\n", name);
         showObjective(jar);
-        
-        jar.generateItems();
 
-        mPlayer = new Player(jar.getMaxNumberOfItems(), jar.getNumberOfItems());
+        jar.fill();
 
-        do
-        {
-            print("Guess: ");
+        mPlayer = new Player();
+        int numberToGuess = jar.getNumberOfItems();
+
+        do {
+            print("How many %s: ", jar.getItemsName());
             int guess = getIntFromInput();
 
-            mPlayer.setGuess(guess);
-            mPlayer.compareGuess();
-
-            if(mPlayer.isGuessTooHigh())
+            if(guess <= jar.getMaxNumberOfItems())
             {
-                print("Hint: Guess is too high. Remaining attempts %d\n",mPlayer.getRemainingAttempts());
+                mPlayer.setGuess(guess);
+                mPlayer.compareGuess(numberToGuess);
+
+                if (mPlayer.isGuessTooHigh(numberToGuess)) {
+                    showWarning(jar);
+                    showHintMessage("high", mPlayer.getAttempts());
+                }
+                else if (mPlayer.isGuessTooLow(numberToGuess))
+                {
+                    showWarning(jar);
+                    showHintMessage("low", mPlayer.getAttempts());
+                }
             }
-            else if(mPlayer.isGuessTooLow())
+            else
             {
-                print("Hint: Guess is too low. Remaining attempts %d\n", mPlayer.getRemainingAttempts());
+                showWarning(jar);
             }
 
-        } while (!mPlayer.isGuessCorrect());
+        } while (!mPlayer.isGuessCorrect(numberToGuess));
 
         showWinningMessage(mPlayer);
         mScanner.close();
     }
 
-    private void showAdminTitle()
+    private void showHintMessage(String miss, int attempts)
     {
-        print("\nADMINISTRATOR SETUP\n");
-        print("*******************\n");
+        print("Hint: Guess is too %s. %d attempts.\n", miss, attempts);
     }
 
-    private void showPlayerTitle(Jar jar)
+    private void showWarning(Jar jar)
     {
-        print("\nPLAYER\n");
-        print("*******************\n");
+        print("\nYour guess must be between %d and %d\n",jar.getMinNumberOfItems(), jar.getMaxNumberOfItems());
     }
 
     private String getStringFromInput()
@@ -92,7 +97,7 @@ public class Prompter {
     private void showObjective(Jar jar)
     {
         print("To win, you must guess how many %s are in the jar. Guess between %d and %d.\n\n",
-                jar.getItemsName(), MIN_ITEMS_NUMBER, jar.getMaxNumberOfItems());
+                jar.getItemsName(), jar.getMinNumberOfItems(), jar.getMaxNumberOfItems());
     }
 
     private void showWinningMessage(Player player)
