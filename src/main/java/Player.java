@@ -5,27 +5,31 @@ import java.io.Console;
  */
 public class Player {
 
+    private int mNumberToGuess;
     private int mGuess;
     private int mAttempts;
 
-    public Player()
+    public Player(int numberToGuess)
     {
+        mNumberToGuess = numberToGuess;
+        mGuess = 0;
         mAttempts = 1;
     }
 
-    public void startGuessing(Console console, int numberToGuess)
+    public void setGuess(int guess)
     {
-        do
+        mGuess = guess;
+    }
+
+    public boolean isGuessCorrect()
+    {
+        if(mGuess != mNumberToGuess)
         {
-            String guessAsString = console.readLine("Guess: ");
-            mGuess = Integer.parseInt(guessAsString);
+            mAttempts++;
+            return false;
+        }
 
-            if(mGuess != numberToGuess)
-            {
-                mAttempts++;
-            }
-
-        }while(mGuess != numberToGuess);
+        return true;
     }
 
     public int getAttempts()

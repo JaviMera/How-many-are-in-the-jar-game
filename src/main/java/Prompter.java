@@ -1,4 +1,5 @@
-import java.io.Console;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Created by Javier on 8/21/2016.
@@ -7,65 +8,95 @@ public class Prompter {
 
     private static final int MIN_ITEMS_NUMBER = 1;
 
-    private Console mConsole;
     private NumberGenerator mNumberGenerator;
     private Player mPlayer;
+    private Scanner mScanner;
 
     public Prompter()
     {
-        mConsole = System.console();
         mNumberGenerator = new NumberGenerator();
-        mPlayer = new Player();
+        mScanner = new Scanner(System.in);
     }
 
     public void play()
     {
-        showAdminMessage();
-        Jar jar = createJar();
+        showAdminTitle();
 
-        showPlayerMessage(jar);
+        print("Enter the name of the item(s) in the jar: ");
+        String itemName = getStringFromInput();
+
+        print("Enter max amount of items: ");
+        int maxItemAmount = getIntFromInput();
+
+        Jar jar = new Jar(itemName, maxItemAmount);
+
+        showPlayerTitle(jar);
         showObjective(jar);
 
         int numberToGuess = mNumberGenerator.generate(jar.getMaxNumberOfItems());
-        mPlayer.startGuessing(mConsole, numberToGuess);
+        mPlayer = new Player(numberToGuess);
+
+        do
+        {
+            print("Guess: ");
+            int guess = getIntFromInput();
+            mPlayer.setGuess(guess);
+
+        }while(!mPlayer.isGuessCorrect());
 
         showWinningMessage(mPlayer);
 
-        getStringFromConsole("Press any key to exit...");
+        print("Press enter to exit...");
+        close();
     }
 
-    private void showAdminMessage()
+    private void close()
+    {
+        try
+        {
+            System.in.read();
+            mScanner.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAdminTitle()
     {
         print("\nADMINISTRATOR SETUP\n");
         print("*******************\n");
     }
 
-    private void showPlayerMessage(Jar jar)
+    private void showPlayerTitle(Jar jar)
     {
         print("\nPLAYER\n");
         print("*******************\n");
     }
 
-    private String getStringFromConsole(String message)
+    private String getStringFromInput()
     {
-        return mConsole.readLine(message);
+        return mScanner.next();
     }
 
-    private int getIntFromConsole(String message)
+    private int getIntFromInput()
     {
-        String numberOfItems = mConsole.readLine(message);
+        return mScanner.nextInt();
+    }
 
-        return Integer.parseInt(numberOfItems);
+    private void print(String message, Object...args)
+    {
+        System.out.printf(message, args);
     }
 
     private void print(String message)
     {
-        mConsole.printf(message);
+        System.out.printf(message);
     }
 
     private void showObjective(Jar jar)
     {
-        mConsole.printf("To win, you must guess how many %s are in the jar. Guess between %d and %d.\n\n",
+        print("To win, you must guess how many %s are in the jar. Guess between %d and %d.\n\n",
                 jar.getItemsName(), MIN_ITEMS_NUMBER, jar.getMaxNumberOfItems());
     }
 
@@ -77,14 +108,6 @@ public class Prompter {
                 ? "\nYou got it in %d attempt\n"
                 : "\nYou got it in %d attempt(s)\n";
 
-        mConsole.printf(message, attempts);
-    }
-
-    private Jar createJar()
-    {
-        String itemName = getStringFromConsole("Enter the name of the item(s) in the jar: ");
-        int maxItemAmount = getIntFromConsole("Enter max amount of items: ");
-
-        return new Jar(itemName, maxItemAmount);
+        print(message, attempts);
     }
 }
