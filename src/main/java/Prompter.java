@@ -29,7 +29,8 @@ public class Prompter {
         int numberToGuess = mNumberGenerator.generate(jar.getMaxNumberOfItems());
         mPlayer.startGuessing(mConsole, numberToGuess);
 
-        showWinningMessage();
+        showWinningMessage(mPlayer);
+
         getStringFromConsole("Press any key to exit...");
     }
 
@@ -57,11 +58,6 @@ public class Prompter {
         return Integer.parseInt(numberOfItems);
     }
 
-    private void print(String message, Object[] messageParams)
-    {
-        mConsole.printf(message, messageParams);
-    }
-
     private void print(String message)
     {
         mConsole.printf(message);
@@ -69,13 +65,19 @@ public class Prompter {
 
     private void showObjective(Jar jar)
     {
-        print("To win, you must guess how many %s are in the jar. Guess between %d and %d.\n\n",
-                new Object[]{jar.getItemsName(), MIN_ITEMS_NUMBER, jar.getMaxNumberOfItems()});
+        mConsole.printf("To win, you must guess how many %s are in the jar. Guess between %d and %d.\n\n",
+                jar.getItemsName(), MIN_ITEMS_NUMBER, jar.getMaxNumberOfItems());
     }
 
-    private void showWinningMessage()
+    private void showWinningMessage(Player player)
     {
-        print("\nYou have won!!. Congratulations!!\n");
+        int attempts = player.getAttempts();
+        
+        String message = attempts == 1
+                ? "\nYou got it in %d attempt\n"
+                : "\nYou got it in %d attempt(s)\n";
+
+        mConsole.printf(message, attempts);
     }
 
     private Jar createJar()

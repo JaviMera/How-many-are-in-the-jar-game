@@ -6,8 +6,12 @@ import java.io.Console;
 public class Player {
 
     private int mGuess;
+    private int mAttempts;
 
-    public Player(){}
+    public Player()
+    {
+        mAttempts = 1;
+    }
 
     public void startGuessing(Console console, int numberToGuess)
     {
@@ -16,6 +20,16 @@ public class Player {
             String guessAsString = console.readLine("Guess: ");
             mGuess = Integer.parseInt(guessAsString);
 
+            if(mGuess != numberToGuess)
+            {
+                mAttempts++;
+            }
+
         }while(mGuess != numberToGuess);
+    }
+
+    public int getAttempts()
+    {
+        return mAttempts;
     }
 }
