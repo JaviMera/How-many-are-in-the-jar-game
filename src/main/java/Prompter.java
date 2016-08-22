@@ -11,7 +11,6 @@ public class Prompter {
     private NumberGenerator mNumberGenerator;
     private Player mPlayer;
     private Scanner mScanner;
-    private boolean mPlayAgain;
 
     public Prompter()
     {
@@ -34,13 +33,24 @@ public class Prompter {
         showObjective(jar);
 
         int numberToGuess = mNumberGenerator.generate(jar.getMaxNumberOfItems());
-        mPlayer = new Player(numberToGuess);
+        mPlayer = new Player(maxItemAmount, numberToGuess);
 
         do
         {
             print("Guess: ");
             int guess = getIntFromInput();
+
             mPlayer.setGuess(guess);
+            mPlayer.compareGuess();
+
+            if(mPlayer.isGuessTooHigh())
+            {
+                print("Hint: Guess is too high. Remaining attempts %d\n",mPlayer.getRemainingAttempts());
+            }
+            else if(mPlayer.isGuessTooLow())
+            {
+                print("Hint: Guess is too low. Remaining attempts %d\n", mPlayer.getRemainingAttempts());
+            }
 
         } while (!mPlayer.isGuessCorrect());
 
@@ -96,5 +106,4 @@ public class Prompter {
 
         print(message, attempts);
     }
-
 }

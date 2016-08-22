@@ -5,12 +5,14 @@ import java.io.Console;
  */
 public class Player {
 
+    private int mMaxItemAmount;
     private int mNumberToGuess;
     private int mGuess;
     private int mAttempts;
 
-    public Player(int numberToGuess)
+    public Player(int maxItemAmount, int numberToGuess)
     {
+        mMaxItemAmount = maxItemAmount;
         mNumberToGuess = numberToGuess;
         mGuess = 0;
         mAttempts = 1;
@@ -23,17 +25,33 @@ public class Player {
 
     public boolean isGuessCorrect()
     {
-        if(mGuess != mNumberToGuess)
-        {
-            mAttempts++;
-            return false;
-        }
-
-        return true;
+        return mGuess == mNumberToGuess;
     }
 
     public int getAttempts()
     {
         return mAttempts;
+    }
+
+    public boolean isGuessTooHigh() {
+        return mGuess > mNumberToGuess;
+    }
+
+    public boolean isGuessTooLow()
+    {
+        return mGuess < mNumberToGuess;
+    }
+
+    public void compareGuess() {
+
+        if(mGuess != mNumberToGuess)
+        {
+            mAttempts++;
+        }
+    }
+
+    public int getRemainingAttempts()
+    {
+        return mMaxItemAmount - mAttempts + 1;
     }
 }
