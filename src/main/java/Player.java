@@ -5,23 +5,11 @@ import java.io.Console;
  */
 public class Player {
 
-    private int mGuess;
     private int mAttempts;
 
     public Player()
     {
-        mGuess = 0;
-        mAttempts = 1;
-    }
-
-    public void setGuess(int guess)
-    {
-        mGuess = guess;
-    }
-
-    public boolean isGuessCorrect(int numberToGuess)
-    {
-        return mGuess == numberToGuess;
+        mAttempts = 0;
     }
 
     public int getAttempts()
@@ -29,20 +17,18 @@ public class Player {
         return mAttempts;
     }
 
-    public boolean isGuessTooHigh(int numberToGuess) {
-        return mGuess > numberToGuess;
+    public boolean isGuessTooHigh(int guess, int numberToGuess) {
+        return guess > numberToGuess;
     }
 
-    public boolean isGuessTooLow(int numberToGuess)
+    public boolean isGuessTooLow(int guess, int numberToGuess)
     {
-        return mGuess < numberToGuess;
+        return guess < numberToGuess;
     }
 
-    public void compareGuess(int numberToGuess) {
+    public boolean compareGuess(int guess, int numberToGuess) {
 
-        if(mGuess != numberToGuess)
-        {
-            mAttempts++;
-        }
+        mAttempts++;
+        return guess == numberToGuess;
     }
 }

@@ -33,6 +33,7 @@ public class Prompter {
 
         mPlayer = new Player();
         int numberToGuess = jar.getNumberOfItems();
+        boolean rightAnswer = false;
 
         do {
             print("How many %s: ", jar.getItemsName());
@@ -40,14 +41,13 @@ public class Prompter {
 
             if(guess <= jar.getMaxNumberOfItems())
             {
-                mPlayer.setGuess(guess);
-                mPlayer.compareGuess(numberToGuess);
+                rightAnswer = mPlayer.compareGuess(guess, numberToGuess);
 
-                if (mPlayer.isGuessTooHigh(numberToGuess)) {
+                if (mPlayer.isGuessTooHigh(guess, numberToGuess)) {
                     showWarning(jar);
                     showHintMessage("high", mPlayer.getAttempts());
                 }
-                else if (mPlayer.isGuessTooLow(numberToGuess))
+                else if (mPlayer.isGuessTooLow(guess, numberToGuess))
                 {
                     showWarning(jar);
                     showHintMessage("low", mPlayer.getAttempts());
@@ -58,7 +58,7 @@ public class Prompter {
                 showWarning(jar);
             }
 
-        } while (!mPlayer.isGuessCorrect(numberToGuess));
+        } while (!rightAnswer);
 
         showWinningMessage(mPlayer);
         mScanner.close();
@@ -106,7 +106,7 @@ public class Prompter {
 
         String message = attempts == 1
                 ? "\nYou got it in %d attempt\n"
-                : "\nYou got it in %d attempt(s)\n";
+                : "\nYou got it in %d attempts\n";
 
         print(message, attempts);
     }
