@@ -11,6 +11,7 @@ public class Prompter {
     private NumberGenerator mNumberGenerator;
     private Player mPlayer;
     private Scanner mScanner;
+    private boolean mPlayAgain;
 
     public Prompter()
     {
@@ -18,8 +19,7 @@ public class Prompter {
         mScanner = new Scanner(System.in);
     }
 
-    public void play()
-    {
+    public void play() {
         showAdminTitle();
 
         print("Enter the name of the item(s) in the jar: ");
@@ -42,24 +42,10 @@ public class Prompter {
             int guess = getIntFromInput();
             mPlayer.setGuess(guess);
 
-        }while(!mPlayer.isGuessCorrect());
+        } while (!mPlayer.isGuessCorrect());
 
         showWinningMessage(mPlayer);
-
-        print("Press enter to exit...");
-        close();
-    }
-
-    private void close()
-    {
-        try
-        {
-            System.in.read();
-            mScanner.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        mScanner.close();
     }
 
     private void showAdminTitle()
@@ -103,11 +89,12 @@ public class Prompter {
     private void showWinningMessage(Player player)
     {
         int attempts = player.getAttempts();
-        
+
         String message = attempts == 1
                 ? "\nYou got it in %d attempt\n"
                 : "\nYou got it in %d attempt(s)\n";
 
         print(message, attempts);
     }
+
 }
