@@ -1,13 +1,11 @@
 import java.io.InputStream;
 import java.util.Scanner;
-
 /**
  * Created by Javier on 8/21/2016.
  */
 public class Prompter {
 
     private Scanner mScanner;
-
     public Prompter(InputStream input)
     {
         mScanner = new Scanner(input);
